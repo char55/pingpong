@@ -1,0 +1,8 @@
+{
+  "name": "pinpong",
+  "version": "1.0.0",
+  "description": "basic pingpong",
+  "main": "index.js",
+  "author": "charlotte haras",
+  "license": "MIT"
+}
