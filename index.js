@@ -1,4 +1,3 @@
-console.log('dsada')
 const FRAMES_PER_SECOND = 30
 const WINDOW_SIZE = {
   width: 1000,
@@ -15,7 +14,7 @@ let ball = {
 }
 let IS_BALL_IN_PLAY = false
 let BALL_SPEED = {
-  x: 10,
+  x: -10,
   y: 0
 }
 const PLAYER_MOVEMENT = 20
@@ -33,6 +32,8 @@ const SCORE = {
   player1: 0,
   player2: 0
 }
+let player1Score
+let player2Score
 
 const ballMovement = () => {
   if (IS_BALL_IN_PLAY) {
@@ -67,11 +68,13 @@ const ballMovement = () => {
       ball.x = -10
       ball.y = -10
       IS_BALL_IN_PLAY = false
-      if (ball.x === WINDOW_SIZE.width) {
+      if (ball.x >= WINDOW_SIZE.width) {
         SCORE.player1 += 1
+        scorePlayer1()
       }
-      if (ball.x === 0) {
+      if (ball.x <= 0) {
         SCORE.player2 += 1
+        scorePlayer2()
       }
     }
     ball.x += BALL_SPEED.x
@@ -87,7 +90,6 @@ const player1Movement = goesUp => {
 }
 const player2Ai = () => {
   if (ball.y >= player2.y && ball.y <= player2.y + PADDLE_SIZE.height) {
-    console.log('stay')
     // player stays put
   } else {
     // // go down
@@ -106,7 +108,6 @@ const resetBall = () => {
   IS_BALL_IN_PLAY = true
   ball.x = WINDOW_SIZE.width / 2
   ball.y = WINDOW_SIZE.height / 2
-  // pause for a sec
 }
 
 const draw = ctx => {
@@ -122,16 +123,20 @@ const draw = ctx => {
   ctx.fillRect(player2.x, player2.y, PADDLE_SIZE.width, PADDLE_SIZE.height)
 }
 
-const updateScore = (player1, player2) => {
-  const scoreElement = document.getElementById('score')
-  console.log('🚀 ~ file: index.js:129 ~ updateScore ~ scoreElement:', scoreElement)
+const scorePlayer1 = () => {
+  document.getElementById('player1').innerHTML = Number(document.getElementById('player1').innerHTML) + 1
+}
+const scorePlayer2 = () => {
+  document.getElementById('player2').innerHTML = Number(document.getElementById('player2').innerHTML) + 1
+}
+
+const resetScore = () => {
+  document.getElementById('player1').innerHTML = 0
+  document.getElementById('player2').innerHTML = 0
 }
 
 window.onload = e => {
-  updateScore(0, 0)
   addEventListener('keydown', event => {
-    console.log('🚀 ~ file: index.js:129 ~ event:', event)
-
     if (event.code.toLowerCase().includes('space')) {
       resetBall()
     }
@@ -144,9 +149,9 @@ window.onload = e => {
   })
 
   const canvas = document.getElementById('play-screen')
-  const ctx = canvas.getContext('2d')
-  console.log(e)
 
+  const ctx = canvas.getContext('2d')
+  resetScore()
   setInterval(() => {
     draw(ctx)
     // do stuff
